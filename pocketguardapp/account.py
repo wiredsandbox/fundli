@@ -7,5 +7,4 @@ account_router = APIRouter(prefix="/account")
 
 @account_router.post("/signup")
 async def signup(request: AccountRequest):
-
     return {"message": "signup"}
