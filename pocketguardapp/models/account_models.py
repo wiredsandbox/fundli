@@ -1,8 +1,7 @@
-from pydantic import BaseModel
 from datetime import datetime
 
 
-class Account(BaseModel):
+class Account:
     id: str
     created_at: datetime
     updated_at: datetime

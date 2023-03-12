@@ -16,3 +16,12 @@ async def signup(request: AccountRequest):
     )
     if error:
         raise HTTPException(status_code=error.code, detail=error.msg)
+
+    if not account:
+        raise HTTPException(status_code=500, detail="failed to create account")
+
+    token = account_service.generate_token(
+        account.email, account.first_name, account.last_name
+    )
+
+    return {"token": token, "account": account.to_dict()}

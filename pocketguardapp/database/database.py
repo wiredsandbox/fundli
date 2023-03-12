@@ -1,14 +1,15 @@
 from pymongo import MongoClient
-from settings.settings import DATABASE_URI, DATABASE_NAME
+from pocketguardapp.settings.settings import DATABASE_URI, DATABASE_NAME
 
 client = MongoClient(host=DATABASE_URI)
+
 
 class Database:
     def __init__(self, collection_name):
         self.database = client[DATABASE_NAME]
         self.collection = self.database[collection_name]
 
-    def insert(self, data):
+    def create(self, data):
         self.collection.insert_one(data)
 
     def fine_one(self, query_filter):
