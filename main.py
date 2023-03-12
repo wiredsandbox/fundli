@@ -1,20 +1,16 @@
-from fastapi import FastAPI, APIRouter
-from pocketguardapp.settings.settings import PORT
 import uvicorn
+from fastapi import FastAPI, APIRouter
 
-
-# app imports
+from pocketguardapp.settings.settings import PORT
 from pocketguardapp.account import account_router
 
 
-app = FastAPI()
 v1 = APIRouter(prefix="/v1")
-
-# router inclusion
 v1.include_router(account_router)
 
-# app inclusion
+app = FastAPI()
 app.include_router(v1)
+
 
 @app.get("/")
 async def root():
