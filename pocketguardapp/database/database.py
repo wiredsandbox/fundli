@@ -10,7 +10,7 @@ class Database:
         self.collection = self.database[collection_name]
 
     def create(self, data):
-        self.collection.insert_one(data)
+        self.collection.insert_one(data.to_dict())
 
     def fine_one(self, query_filter):
         return self.collection.find_one(query_filter)
