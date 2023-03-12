@@ -48,5 +48,3 @@ def is_valid_email(email):
     if re.fullmatch(EMAIL_REGEX, email):
         return True
     return False
-
-
