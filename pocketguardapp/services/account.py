@@ -1,4 +1,7 @@
 import bcrypt
+import datetime
+import jwt
+from settings.settings import SECRET_KEY
 
 
 def create_account():
@@ -18,3 +21,22 @@ def compare_password(password, hashed_password):
     It returns True if they match, False otherwise.
     """
     return bcrypt.checkpw(password.encode("utf-8"), hashed_password)
+
+
+# generate token from email, first name, last name
+def generate_token(email, first_name, last_name):
+    return jwt.encode(
+        {
+            "email": email,
+            "first_name": first_name,
+            "last_name": last_name,
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(days=30),
+        },
+        SECRET_KEY,
+        algorithm="RS256",
+    )
+
+
+# decode token
+def decode_token(token):
+    return jwt.decode(token, SECRET_KEY, algorithms="RS256")
