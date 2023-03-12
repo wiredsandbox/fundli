@@ -3,6 +3,7 @@ import datetime
 import jwt
 from settings.settings import SECRET_KEY
 
+
 def create_account():
     pass
 
@@ -20,8 +21,6 @@ def compare_password(password, hashed_password):
     It returns True if they match, False otherwise.
     """
     return bcrypt.checkpw(password.encode("utf-8"), hashed_password)
-
-
 
 
 # generate token from email, first name, last name
