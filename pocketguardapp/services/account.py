@@ -2,11 +2,26 @@ import bcrypt
 import datetime
 import jwt
 import re
+
+from pocketguardapp.errors.error import Error
 from pocketguardapp.settings.settings import SECRET_KEY, EMAIL_REGEX
 
 
-def create_account():
-    pass
+def create_account(email, password, first_name, last_name: str):
+    """
+    create_account creates a new account.
+    It validates the email and checks that the email is not already in use.
+    It returns the new account and an error if there is one.
+
+    1. check if email is valid
+    2. check if email is already in use
+    3. hash password
+    4. create account
+    """
+    if not is_valid_email(email):
+        return None, Error("invalid email", 400)
+
+    return None, None
 
 
 def hash_password(password):
