@@ -1,7 +1,8 @@
 import bcrypt
 import datetime
 import jwt
-from settings.settings import SECRET_KEY
+import re
+from pocketguardapp.settings.settings import SECRET_KEY, EMAIL_REGEX
 
 
 def create_account():
@@ -40,3 +41,12 @@ def generate_token(email, first_name, last_name):
 # decode token
 def decode_token(token):
     return jwt.decode(token, SECRET_KEY, algorithms="RS256")
+
+
+# check if email is a valid email
+def is_valid_email(email):
+    if re.fullmatch(EMAIL_REGEX, email):
+        return True
+    return False
+
+
