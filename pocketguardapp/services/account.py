@@ -3,6 +3,8 @@ import datetime
 import jwt
 import re
 
+from bson.objectid import ObjectId
+
 from pocketguardapp.errors.error import Error
 from pocketguardapp.settings.settings import SECRET_KEY, EMAIL_REGEX
 from pocketguardapp.database.account import account_database
@@ -23,6 +25,7 @@ def create_account(email: str, password: str, first_name: str, last_name: str):
         return None, Error("email already in use", 400)
 
     account = Account()
+    account.id = ObjectId()
     account.created_at = datetime.datetime.utcnow()
     account.updated_at = account.created_at
     account.email = email
