@@ -1,8 +1,11 @@
 from fastapi import APIRouter, HTTPException, Depends
 from .schemas.account_schemas import (
-    AccountRequest, AccountLoginRequest,
-    AccountAuthResponse, AccountResponse,
-    account_auth_response_serializer, single_account_response,
+    AccountRequest,
+    AccountLoginRequest,
+    AccountAuthResponse,
+    AccountResponse,
+    account_auth_response_serializer,
+    single_account_response,
 )
 from .services import account as account_service
 from .models.account_models import Account
