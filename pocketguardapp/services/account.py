@@ -75,7 +75,7 @@ def compare_password(password, hashed_password):
     compare_password compares a password with a hashed password.
     It returns True if they match, False otherwise.
     """
-    return bcrypt.checkpw(password.encode("utf-8"), hashed_password)
+    return bcrypt.checkpw(password.encode("utf-8"), hashed_password.encode("utf-8"))
 
 
 # generate token
@@ -108,3 +108,16 @@ def is_valid_email(email):
     if re.fullmatch(EMAIL_REGEX, email):
         return True
     return False
+
+
+def login_account(email, password):
+    if not is_valid_email(email):
+        return None, Error("invalid email", 400)
+    if not compare_password(password, hash_password(password)):
+        return None, Error("invalid password", 400)
+
+    account, error = get_account(email)
+    if error:
+        return None, error
+
+    return account, None
