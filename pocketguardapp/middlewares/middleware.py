@@ -5,7 +5,6 @@ from pocketguardapp.services.account import get_account, decode_token
 app = APIRouter()
 
 
-
 @app.middleware(
     "http",
     "https",
