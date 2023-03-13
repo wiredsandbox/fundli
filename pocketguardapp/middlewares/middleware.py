@@ -5,7 +5,7 @@ from pocketguardapp.services.account import get_account, decode_token
 app = APIRouter()
 
 
-# show me how to use get account in fastapi middleware
+
 @app.middleware(
     "http",
     "https",
