@@ -34,4 +34,3 @@ def get_authorization_token(request: Request):
     if len(parts) != 2:
         return None
     return parts[1]
-
