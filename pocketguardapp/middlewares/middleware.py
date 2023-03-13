@@ -1,36 +1,31 @@
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, Header
 from fastapi.responses import JSONResponse
 from pocketguardapp.services.account import get_account, decode_token
 
 app = APIRouter()
 
 
-@app.middleware(
-    "http",
-    "https",
-)
-def authenticate(request: Request, call_next):
-    token = get_authorization_token(request)
+def authenticate(authorization: str = Header()):
+    token = get_authorization_token(authorization)
     if not token:
-        return JSONResponse(status_code=401, content={"detail": "token not found"})
+        return HTTPException(status_code=401, detail="token not found")
 
     # get email from token
     email = decode_token(token).get("email")
+    # get account for email
     account, error = get_account(email)
-
     if error:
-        return JSONResponse(status_code=error.code, content={"detail": error.msg})
+        raise HTTPException(status_code=401, detail=error.msg)
 
-    request.state.account = account
-    return call_next(request)
+    return account
 
 
-def get_authorization_token(request: Request):
+def get_authorization_token(authorization: str):
     """
     get_authorization_token returns the authorization token from the request
     expects format: Authorization: Bearer <token>
     """
-    parts = str(request.headers.get("Authorization")).split(" ")
+    parts = authorization.split(" ")
     if len(parts) != 2:
         return None
     return parts[1]
