@@ -4,6 +4,7 @@ import jwt
 import re
 
 from bson.objectid import ObjectId
+from bson.errors import InvalidId
 
 from pocketguardapp.errors.error import Error
 from pocketguardapp.settings.settings import SECRET_KEY, EMAIL_REGEX
@@ -43,6 +44,25 @@ def create_account(email: str, password: str, first_name: str, last_name: str):
     return account, None
 
 
+def get_account(idOrEmail):
+    """fetch account from database"""
+    if idOrEmail == "":
+        return None, Error("id or email is required", 400)
+
+    query_filter = {}
+    try:
+        oid = ObjectId(idOrEmail)
+        query_filter = {"_id": oid}
+    except InvalidId:
+        query_filter["email"] = idOrEmail
+
+    account = account_database.find_one(query_filter)
+    if not account:
+        return None, Error("account not found", 404)
+
+    return account, None
+
+
 def hash_password(password):
     """
     hash_password returns an encrypted version of the password
@@ -60,7 +80,7 @@ def compare_password(password, hashed_password):
 
 # generate token
 def generate_token(email, first_name, last_name):
-    # encode  secret key with RS256 algorithm
+    # encode secret key with HS256 algorithm
 
     token = jwt.encode(
         payload={
@@ -77,7 +97,7 @@ def generate_token(email, first_name, last_name):
 
 # decode token
 def decode_token(token):
-    return jwt.decode(token, SECRET_KEY, algorithms="HS256")
+    return jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
 
 
 # check if email is a valid email
@@ -85,13 +105,3 @@ def is_valid_email(email):
     if re.fullmatch(EMAIL_REGEX, email):
         return True
     return False
-
-
-# fecth account from database
-def get_account(email):
-    query_filter = {"email": email}
-    account = account_database.find_one(query_filter)
-    if not account:
-        return None, Error("account not found", 404)
-
-    return account, None

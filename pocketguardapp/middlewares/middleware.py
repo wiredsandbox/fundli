@@ -16,12 +16,11 @@ def authenticate(request: Request, call_next):
         return JSONResponse(status_code=401, content={"detail": "token not found"})
 
     # get email from token
-    email = decode_token(token)["email"]
+    email = decode_token(token).get("email")
     account, error = get_account(email)
 
     if error:
         return JSONResponse(status_code=error.code, content={"detail": error.msg})
 
     request.state.account = account
-    response = call_next(request)
-    return response
+    return call_next(request)

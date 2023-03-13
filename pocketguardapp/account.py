@@ -30,7 +30,6 @@ async def signup(request: AccountRequest):
     )
 
     #  map account to account response
-
     return account_response_serializer(account, token)
 
 
