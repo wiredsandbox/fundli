@@ -58,18 +58,21 @@ def compare_password(password, hashed_password):
     return bcrypt.checkpw(password.encode("utf-8"), hashed_password)
 
 
-# generate token from email, first name, last name
+# generate token 
 def generate_token(email, first_name, last_name):
-    return jwt.encode(
-        {
+    # encode  secret key with RS256 algorithm
+
+    token = jwt.encode(
+        payload={
             "email": email,
-            "first_name": first_name,
-            "last_name": last_name,
+            "name": f"{first_name} {last_name}",
             "exp": datetime.datetime.utcnow() + datetime.timedelta(days=30),
         },
-        SECRET_KEY,
-        algorithm="RS256",
+        key=SECRET_KEY,
+        algorithm="HS256",
     )
+
+    return token
 
 
 # decode token
@@ -82,3 +85,18 @@ def is_valid_email(email):
     if re.fullmatch(EMAIL_REGEX, email):
         return True
     return False
+
+# function to check token validity and return id 
+def get_account(token):
+    try:
+        decoded_token = decode_token(token)
+    except Exception as e:
+        print(e)
+        return None, Error("invalid token", 401)
+
+    query_filter = {"email": decoded_token["email"]}
+    account = account_database.read(query_filter)
+    if not account:
+        return None, Error("account not found", 404)
+
+    return account, None

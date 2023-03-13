@@ -1,12 +1,16 @@
 from fastapi import APIRouter, HTTPException
-from .schemas.account_schemas import AccountRequest
+from .schemas.account_schemas import (
+    AccountRequest, 
+    AccountResponse,
+    AccountLoginRequest,
+    )
 from .services import account as account_service
 
 
 account_router = APIRouter(prefix="/account")
 
 
-@account_router.post("/signup")
+@account_router.post("/signup", response_model=AccountResponse)
 async def signup(request: AccountRequest):
     account, error = account_service.create_account(
         email=request.email,
@@ -24,4 +28,17 @@ async def signup(request: AccountRequest):
         account.email, account.first_name, account.last_name
     )
 
-    return {"token": token, "account": account.to_dict()}
+    #  map account to account response
+    account = account.to_dict()
+    account_response = AccountResponse(
+        id=account["_id"],
+        email=account["email"],
+        first_name=account["first_name"],
+        last_name=account["last_name"],
+        token=token,
+    )
+    return account_response
+
+
+# @account_router.post("/login", response_model=AccountResponse)
+# async def login(request: AccountLoginRequest):

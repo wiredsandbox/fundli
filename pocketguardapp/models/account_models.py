@@ -2,6 +2,7 @@ from datetime import datetime
 
 from bson.objectid import ObjectId
 
+
 class Account:
     id: ObjectId
     created_at: datetime
@@ -17,8 +18,8 @@ class Account:
 
     def to_dict(self):
         """to_dict returns a dict representation of the Account"""
-        return {
-            "_id": self.id,
+        data = {
+            "_id": str(self.id),
             "created_at": self.created_at,
             "updated_at": self.updated_at,
             "email": self.email,
@@ -26,3 +27,4 @@ class Account:
             "first_name": self.first_name,
             "last_name": self.last_name,
         }
+        return data
