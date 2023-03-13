@@ -45,5 +45,3 @@ async def login(request: AccountLoginRequest):
     )
 
     return account_auth_response_serializer(account, token)
-
-
