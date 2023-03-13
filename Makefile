@@ -8,3 +8,5 @@ fmt:
 test:
 	python test.py
 
+service:
+	python main.py
