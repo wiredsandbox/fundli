@@ -10,8 +10,7 @@ app = APIRouter()
     "https",
 )
 def authenticate(request: Request, call_next):
-    token = request.headers.get("Authorization")
-
+    token = get_authorization_token(request)
     if not token:
         return JSONResponse(status_code=401, content={"detail": "token not found"})
 
@@ -24,3 +23,15 @@ def authenticate(request: Request, call_next):
 
     request.state.account = account
     return call_next(request)
+
+
+def get_authorization_token(request: Request):
+    """
+    get_authorization_token returns the authorization token from the request
+    expects format: Authorization: Bearer <token>
+    """
+    parts = str(request.headers.get("Authorization")).split(" ")
+    if len(parts) != 2:
+        return None
+    return parts[1]
+
