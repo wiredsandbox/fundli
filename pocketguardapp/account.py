@@ -31,7 +31,3 @@ async def signup(request: AccountRequest):
 
     #  map account to account response
     return account_response_serializer(account, token)
-
-
-# @account_router.post("/login", response_model=AccountResponse)
-# async def login(request: AccountLoginRequest):
