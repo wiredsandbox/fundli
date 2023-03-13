@@ -24,15 +24,15 @@ def create_account(email: str, password: str, first_name: str, last_name: str):
     if account_database.count(query_filter) > 0:
         return None, Error("email already in use", 400)
 
-    account = Account()
-    account.id = ObjectId()
-    account.created_at = datetime.datetime.utcnow()
-    account.updated_at = account.created_at
-    account.email = email
-    account.password = hash_password(password)
-    account.first_name = first_name
-    account.last_name = last_name
-    account.used_projection = False
+    account = Account(
+        id=ObjectId(),
+        created_at=datetime.datetime.utcnow(),
+        updated_at=datetime.datetime.utcnow(),
+        email=email,
+        password=hash_password(password),
+        first_name=first_name,
+        last_name=last_name,
+    )
 
     try:
         account_database.create(account)
@@ -58,23 +58,26 @@ def compare_password(password, hashed_password):
     return bcrypt.checkpw(password.encode("utf-8"), hashed_password)
 
 
-# generate token from email, first name, last name
+# generate token
 def generate_token(email, first_name, last_name):
-    return jwt.encode(
-        {
+    # encode  secret key with RS256 algorithm
+
+    token = jwt.encode(
+        payload={
             "email": email,
-            "first_name": first_name,
-            "last_name": last_name,
+            "name": f"{first_name} {last_name}",
             "exp": datetime.datetime.utcnow() + datetime.timedelta(days=30),
         },
-        SECRET_KEY,
-        algorithm="RS256",
+        key=SECRET_KEY,
+        algorithm="HS256",
     )
+
+    return token
 
 
 # decode token
 def decode_token(token):
-    return jwt.decode(token, SECRET_KEY, algorithms="RS256")
+    return jwt.decode(token, SECRET_KEY, algorithms="HS256")
 
 
 # check if email is a valid email
@@ -82,3 +85,13 @@ def is_valid_email(email):
     if re.fullmatch(EMAIL_REGEX, email):
         return True
     return False
+
+
+# fecth account from database
+def get_account(email):
+    query_filter = {"email": email}
+    account = account_database.find_one(query_filter)
+    if not account:
+        return None, Error("account not found", 404)
+
+    return account, None

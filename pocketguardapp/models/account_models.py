@@ -4,21 +4,30 @@ from bson.objectid import ObjectId
 
 
 class Account:
-    id: ObjectId
-    created_at: datetime
-    updated_at: datetime
+    def __init__(
+        self,
+        id: ObjectId,
+        created_at: datetime,
+        updated_at: datetime,
+        email: str,
+        password: str,
+        first_name: str,
+        last_name: str,
+    ):
+        self.id = id
+        self.created_at = created_at
+        self.updated_at = updated_at
+        self.email = email
+        self.password = password
+        self.first_name = first_name
+        self.last_name = last_name
 
-    email: str
-    password: str
-    first_name: str
-    last_name: str
-
-    # don't write these fields to the database
-    used_projection: bool
+        # don't write these fields to the database
+        self.used_projection = False
 
     def to_dict(self):
         """to_dict returns a dict representation of the Account"""
-        return {
+        data = {
             "_id": self.id,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
@@ -27,3 +36,4 @@ class Account:
             "first_name": self.first_name,
             "last_name": self.last_name,
         }
+        return data
