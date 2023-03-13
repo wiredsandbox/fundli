@@ -1,19 +1,20 @@
 from pydantic import BaseModel
 
 
-class AccountBase(BaseModel):
-    email: str
 
-class AccountRequest(AccountBase):
+
+class AccountRequest(BaseModel):
     email: str
     password: str
     first_name: str
     last_name: str
 
-class AccountLoginRequest(AccountBase):
+class AccountLoginRequest(BaseModel):
+    email: str
     password: str
 
-class AccountResponse(AccountBase):
+class AccountResponse(BaseModel):
+    email: str
     id: str
     first_name: str
     last_name: str
