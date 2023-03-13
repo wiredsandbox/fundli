@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from .schemas.account_schemas import (
     AccountRequest,
-    AccountResponse,
+    AccountAuthResponse,
     AccountLoginRequest,
     account_auth_response_serializer,
 )
@@ -11,7 +11,7 @@ from .services import account as account_service
 account_router = APIRouter(prefix="/account")
 
 
-@account_router.post("/signup", response_model=AccountResponse)
+@account_router.post("/signup", response_model=AccountAuthResponse)
 async def signup(request: AccountRequest):
     account, error = account_service.create_account(
         email=request.email,
@@ -32,7 +32,7 @@ async def signup(request: AccountRequest):
     return account_auth_response_serializer(account, token)
 
 
-@account_router.post("/login", response_model=AccountResponse)
+@account_router.post("/login", response_model=AccountAuthResponse)
 async def login(request: AccountLoginRequest):
     account, error = account_service.login_account(
         email=request.email, password=request.password
