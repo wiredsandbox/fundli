@@ -1,9 +1,10 @@
 from fastapi import APIRouter, HTTPException
 from .schemas.account_schemas import (
-    AccountRequest, 
+    AccountRequest,
     AccountResponse,
     AccountLoginRequest,
-    )
+    account_response_serializer,
+)
 from .services import account as account_service
 
 
@@ -29,15 +30,8 @@ async def signup(request: AccountRequest):
     )
 
     #  map account to account response
-    account = account.to_dict()
-    account_response = AccountResponse(
-        id=account["_id"],
-        email=account["email"],
-        first_name=account["first_name"],
-        last_name=account["last_name"],
-        token=token,
-    )
-    return account_response
+
+    return account_response_serializer(account, token)
 
 
 # @account_router.post("/login", response_model=AccountResponse)

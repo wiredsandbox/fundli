@@ -24,15 +24,15 @@ def create_account(email: str, password: str, first_name: str, last_name: str):
     if account_database.count(query_filter) > 0:
         return None, Error("email already in use", 400)
 
-    account = Account()
-    account.id = ObjectId()
-    account.created_at = datetime.datetime.utcnow()
-    account.updated_at = account.created_at
-    account.email = email
-    account.password = hash_password(password)
-    account.first_name = first_name
-    account.last_name = last_name
-    account.used_projection = False
+    account = Account(
+        id=ObjectId(),
+        created_at=datetime.datetime.utcnow(),
+        updated_at=datetime.datetime.utcnow(),
+        email=email,
+        password=hash_password(password),
+        first_name=first_name,
+        last_name=last_name,
+    )
 
     try:
         account_database.create(account)
@@ -58,7 +58,7 @@ def compare_password(password, hashed_password):
     return bcrypt.checkpw(password.encode("utf-8"), hashed_password)
 
 
-# generate token 
+# generate token
 def generate_token(email, first_name, last_name):
     # encode  secret key with RS256 algorithm
 
@@ -77,7 +77,7 @@ def generate_token(email, first_name, last_name):
 
 # decode token
 def decode_token(token):
-    return jwt.decode(token, SECRET_KEY, algorithms="RS256")
+    return jwt.decode(token, SECRET_KEY, algorithms="HS256")
 
 
 # check if email is a valid email
@@ -86,15 +86,10 @@ def is_valid_email(email):
         return True
     return False
 
-# function to check token validity and return id 
-def get_account(token):
-    try:
-        decoded_token = decode_token(token)
-    except Exception as e:
-        print(e)
-        return None, Error("invalid token", 401)
 
-    query_filter = {"email": decoded_token["email"]}
+# fecth account from database
+def get_account(email):
+    query_filter = {"email": email}
     account = account_database.find_one(query_filter)
     if not account:
         return None, Error("account not found", 404)
