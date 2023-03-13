@@ -1,11 +1,15 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from .schemas.account_schemas import (
     AccountRequest,
     AccountAuthResponse,
     AccountLoginRequest,
     account_auth_response_serializer,
+    account_response_serializer,
+    single_account_response,
 )
 from .services import account as account_service
+from .models.account_models import Account
+from .middlewares.middleware import authenticate
 
 
 account_router = APIRouter(prefix="/account")
@@ -45,3 +49,11 @@ async def login(request: AccountLoginRequest):
     )
 
     return account_auth_response_serializer(account, token)
+
+
+@account_router.get("/me", response_model=AccountResponse)
+async def get_me(activeAccount: Account = Depends(authenticate)):
+    """
+    get_me returns the account for the authenticated user
+    """
+    return account_response_serializer(activeAccount, "")

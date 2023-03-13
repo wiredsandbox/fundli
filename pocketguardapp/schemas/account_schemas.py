@@ -34,3 +34,9 @@ def account_auth_response_serializer(account: Account, token: str):
     """account_response_serializer serializes an account to an AccountResponse"""
 
     return AccountAuthResponse(token=token, id=str(account.id), **account.to_dict())
+
+
+def single_account_response(account: Account):
+    """single_account_response serializes an account to an AccountResponse"""
+
+    return AccountResponse(id=str(account.id), **account.to_dict())
