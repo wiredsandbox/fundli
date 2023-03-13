@@ -12,7 +12,7 @@ class Database:
     def create(self, data):
         self.collection.insert_one(data.to_dict())
 
-    def fine_one(self, query_filter):
+    def find_one(self, query_filter):
         return self.collection.find_one(query_filter)
 
     def count(self, query_filter):

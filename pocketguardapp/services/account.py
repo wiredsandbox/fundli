@@ -95,7 +95,7 @@ def get_account(token):
         return None, Error("invalid token", 401)
 
     query_filter = {"email": decoded_token["email"]}
-    account = account_database.read(query_filter)
+    account = account_database.find_one(query_filter)
     if not account:
         return None, Error("account not found", 404)
 
