@@ -31,7 +31,7 @@ class AccountResponse(BaseModel):
         }
 
 
-def account_auth_response_serializer(account: Account, token: str = None):
+def account_auth_response_serializer(account: Account, token: str):
     """account_response_serializer serializes an account to an AccountResponse"""
 
     return AccountResponse(token=token, id=str(account.id), **account.to_dict())
