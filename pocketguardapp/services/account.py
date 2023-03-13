@@ -63,6 +63,16 @@ def get_account(idOrEmail):
     return account, None
 
 
+def login_account(email, password):
+    if not is_valid_email(email):
+        return None, Error("invalid email", 400)
+
+    if not compare_password(password, hash_password(password)):
+        return None, Error("invalid password", 400)
+
+    return get_account(email)
+
+
 def hash_password(password):
     """
     hash_password returns an encrypted version of the password
@@ -110,14 +120,3 @@ def is_valid_email(email):
     return False
 
 
-def login_account(email, password):
-    if not is_valid_email(email):
-        return None, Error("invalid email", 400)
-    if not compare_password(password, hash_password(password)):
-        return None, Error("invalid password", 400)
-
-    account, error = get_account(email)
-    if error:
-        return None, error
-
-    return account, None

@@ -15,8 +15,8 @@ class AccountLoginRequest(BaseModel):
 
 
 class AccountAuthResponse(BaseModel):
-    email: str
     id: str
+    email: str
     first_name: str
     last_name: str
     token: str
@@ -28,6 +28,13 @@ class AccountAuthResponse(BaseModel):
             "first_name": "John",
             "last_name": "Doe",
         }
+
+
+class AccountResponse(BaseModel):
+    id: str
+    email: str
+    first_name: str
+    last_name: str
 
 
 def account_auth_response_serializer(account: Account, token: str):
