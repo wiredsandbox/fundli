@@ -7,7 +7,7 @@ test:
 
 commit: 
 	git add .
-	git commit -m "commit"
+	git commit
 
 service:
 	python main.py
