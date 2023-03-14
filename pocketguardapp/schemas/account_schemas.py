@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+
 from pocketguardapp.models.account_models import Account
 
 
