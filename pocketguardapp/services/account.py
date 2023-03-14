@@ -1,15 +1,15 @@
-import bcrypt
 import datetime
-import jwt
 import re
 
-from bson.objectid import ObjectId
+import bcrypt
+import jwt
 from bson.errors import InvalidId
+from bson.objectid import ObjectId
 
-from pocketguardapp.errors.error import Error
-from pocketguardapp.settings.settings import SECRET_KEY, EMAIL_REGEX
 from pocketguardapp.database.account import account_database
+from pocketguardapp.errors.error import Error
 from pocketguardapp.models.account_models import Account
+from pocketguardapp.settings.settings import EMAIL_REGEX, SECRET_KEY
 
 
 def create_account(email: str, password: str, first_name: str, last_name: str):
