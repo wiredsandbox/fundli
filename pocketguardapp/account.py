@@ -5,7 +5,7 @@ from .schemas.account_schemas import (
     AccountAuthResponse,
     AccountResponse,
     account_auth_response_serializer,
-    single_account_response,
+    account_response_serializer,
 )
 from .services import account as account_service
 from .models.account_models import Account
@@ -59,4 +59,4 @@ async def get_me(activeAccount: Account = Depends(authenticate)):
     """
     get_me returns the account for the authenticated user
     """
-    return single_account_response(activeAccount)
+    return account_response_serializer(activeAccount)
