@@ -1,6 +1,6 @@
-from .database import Database
-
 from pocketguardapp.models.account_models import Account
+
+from .database import Database
 
 
 class AccountDatabase(Database):

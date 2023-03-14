@@ -1,14 +1,12 @@
 import uvicorn
+from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, APIRouter
 
-
-from pocketguardapp.settings.settings import PORT, SECRET_KEY
 from pocketguardapp.account import account_router
-
+from pocketguardapp.settings.settings import PORT
 
 v1 = APIRouter(prefix="/v1")
-v1.include_router(account_router)
+v1.include_router(account_router, tags=["Account"])
 
 app = FastAPI()
 
