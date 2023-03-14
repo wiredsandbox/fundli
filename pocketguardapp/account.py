@@ -17,6 +17,46 @@ account_router = APIRouter(prefix="/account")
 
 @account_router.post("/signup", response_model=AccountAuthResponse)
 async def signup(request: AccountRequest):
+    """
+    intro-->
+
+            This endpoint is used to create a new account. It takes in a request body with the following fields:
+
+    paramDesc-->
+
+            reqBody-->email-->The email of the account
+            reqBody-->password-->The password of the account
+            reqBody-->first_name-->The first name of the account
+            reqBody-->last_name-->The last name of the account
+
+    returnDesc-->
+
+            On success, the endpoint returns an AccountAuthResponse object with the following fields:
+
+    paramDesc-->
+
+            id-->The id of the account
+            email-->The email of the account
+            first_name-->The first name of the account
+            last_name-->The last name of the account
+            token-->The JWT token for the account
+
+    returnDesc-->
+
+            On failure, the endpoint returns an error with the following fields:
+
+    paramDesc-->
+
+            code-->The HTTP status code of the error
+            msg-->The error message
+
+            example-->
+
+                error code: 400
+                message:{
+                    "detail": "email already exists"
+                    }
+    """
     account, error = account_service.create_account(
         email=request.email,
         password=request.password,
@@ -38,6 +78,43 @@ async def signup(request: AccountRequest):
 
 @account_router.post("/login", response_model=AccountAuthResponse)
 async def login(request: AccountLoginRequest):
+    """intro-->
+
+        This endpoint is used to login an account. It takes in a request body with the following fields:
+
+    paramDesc-->
+
+            reqBody-->email-->The email of the account
+            reqBody-->password-->The password of the account
+
+    returnDesc-->
+
+            On success, the endpoint returns an AccountAuthResponse object with the following fields:
+
+    paramDesc-->
+
+            id-->The id of the account
+            email-->The email of the account
+            first_name-->The first name of the account
+            last_name-->The last name of the account
+            token-->The JWT token for the account
+
+    returnDesc-->
+
+            On failure, the endpoint returns an error with the following fields:
+
+    paramDesc-->
+
+            code-->The HTTP status code of the error
+            msg-->The error message
+
+            example-->
+
+                error code: 500
+                message:{
+                    "detail": "failed to login account"
+                    }
+    """
     account, error = account_service.login_account(
         email=request.email, password=request.password
     )
@@ -57,6 +134,39 @@ async def login(request: AccountLoginRequest):
 @account_router.get("/me", response_model=AccountResponse)
 async def get_me(activeAccount: Account = Depends(authenticate)):
     """
-    get_me returns the account for the authenticated user
+    intro-->
+
+        This endpoint is used to get the account of the currently logged in user. It takes in a request body with the following fields:
+
+    paramDesc-->
+
+            reqBody-->Header-->Authorization-->The JWT token of the account
+
+    returnDesc-->
+
+            On success, the endpoint returns an AccountResponse object with the following fields:
+
+    paramDesc-->
+
+            id-->The id of the account
+            email-->The email of the account
+            first_name-->The first name of the account
+            last_name-->The last name of the account
+
+    returnDesc-->
+
+            On failure, the endpoint returns an error with the following fields:
+
+    paramDesc-->
+
+            code-->The HTTP status code of the error
+            msg-->The error message
+
+            example-->
+
+                error code: 401
+                message:{
+                    "detail": "token not found"
+                    }
     """
     return account_response_serializer(activeAccount)

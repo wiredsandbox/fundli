@@ -8,7 +8,7 @@ from pocketguardapp.account import account_router
 
 
 v1 = APIRouter(prefix="/v1")
-v1.include_router(account_router)
+v1.include_router(account_router, tags=["Account"])
 
 app = FastAPI()
 
@@ -24,7 +24,7 @@ app.add_middleware(
 app.include_router(v1)
 
 
-@app.get("/")
+@app.get("/test", tags=["Test"])
 async def root():
     return {"status": "OK"}
 
