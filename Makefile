@@ -11,3 +11,6 @@ commit:
 
 service:
 	python main.py
+
+deploy:
+	git push heroku main
