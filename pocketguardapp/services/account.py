@@ -92,18 +92,6 @@ def compare_password(password, hashed_password):
 def generate_token(email, first_name, last_name):
     # encode secret key with HS256 algorithm
 
-    # token = jws.sign(
-    #     payload={
-    #         "email": email,
-    #         "name": f"{first_name} {last_name}",
-    #         "exp": datetime.datetime.utcnow() + datetime.timedelta(days=30),
-    #         "iat": datetime.datetime.utcnow(),
-    #         "iss": "pocketguard-api",
-    #         "aud": "pocketguard-app",
-    #     },
-    #     key=SECRET_KEY,
-    #     algorithm="HS256",
-    # )
     token = jwt.encode(
         claims={
             "email": email,
