@@ -2,9 +2,9 @@ import datetime
 import re
 
 import bcrypt
-import jwt
 from bson.errors import InvalidId
 from bson.objectid import ObjectId
+from jose import jwt
 
 from pocketguardapp.database.account import account_database
 from pocketguardapp.errors.error import Error
@@ -92,8 +92,20 @@ def compare_password(password, hashed_password):
 def generate_token(email, first_name, last_name):
     # encode secret key with HS256 algorithm
 
+    # token = jws.sign(
+    #     payload={
+    #         "email": email,
+    #         "name": f"{first_name} {last_name}",
+    #         "exp": datetime.datetime.utcnow() + datetime.timedelta(days=30),
+    #         "iat": datetime.datetime.utcnow(),
+    #         "iss": "pocketguard-api",
+    #         "aud": "pocketguard-app",
+    #     },
+    #     key=SECRET_KEY,
+    #     algorithm="HS256",
+    # )
     token = jwt.encode(
-        payload={
+        claims={
             "email": email,
             "name": f"{first_name} {last_name}",
             "exp": datetime.datetime.utcnow() + datetime.timedelta(days=30),
@@ -110,7 +122,14 @@ def generate_token(email, first_name, last_name):
 
 # decode token
 def decode_token(token):
-    return jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+    # return jws.verify(token, SECRET_KEY, algorithms=["HS256"])
+    return jwt.decode(
+        token,
+        SECRET_KEY,
+        algorithms=["HS256"],
+        audience="pocketguard-app",
+        issuer="pocketguard-api",
+    )
 
 
 # check if email is a valid email
