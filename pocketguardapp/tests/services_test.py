@@ -1,7 +1,7 @@
 import pytz
 from datetime import datetime
 
-from pocketguardapp.services.services import parse_datetime
+from pocketguardapp.services.shared import parse_datetime
 
 def test_parse_datetime():
     class testCase:

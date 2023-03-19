@@ -5,7 +5,7 @@ from pocketguardapp.database.transaction import transaction_database
 from pocketguardapp.errors.error import Error
 from pocketguardapp.models.transaction_models import Transaction
 from pocketguardapp.models.account_models import AccountInfo
-from .services import parse_datetime
+from .shared import parse_datetime
 
 
 TRANSACTION_KIND_INCOME = "INCOME"
@@ -38,6 +38,7 @@ def create_transaction(
         return None, Error(
             "invalid transaction timestamp, expects format '2009-01-01T14:01:02-04:00'", 400
         )
+    transaction_timestamp = transaction_timestamp.astimezone(datetime.timezone.utc)
 
     transaction = Transaction(
         id=ObjectId(),
