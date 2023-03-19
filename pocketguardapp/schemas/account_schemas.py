@@ -18,8 +18,8 @@ class AccountLoginRequest(BaseModel):
 class AccountAuthResponse(BaseModel):
     id: str
     email: str
-    first_name: str
-    last_name: str
+    firstName: str
+    lastName: str
     token: str
 
     class config:
@@ -31,11 +31,18 @@ class AccountAuthResponse(BaseModel):
         }
 
 
+class AccountInfoResponse(BaseModel):
+    id: str
+    email: str
+    firstName: str
+    lastName: str
+
+
 class AccountResponse(BaseModel):
     id: str
     email: str
-    first_name: str
-    last_name: str
+    firstName: str
+    lastName: str
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -44,10 +51,21 @@ class AccountResponse(BaseModel):
 def account_auth_response_serializer(account: Account, token: str):
     """account_auth_response_serializer serializes an account to an AccountResponse"""
 
-    return AccountAuthResponse(token=token, id=str(account.id), **account.to_dict())
+    return AccountAuthResponse(
+        token=token,
+        id=str(account.id),
+        email=account.email,
+        firstName=account.first_name,
+        lastName=account.last_name,
+    )
 
 
 def account_response_serializer(account: Account):
     """account_response_serializer serializes an account to an AccountResponse"""
 
-    return AccountResponse(id=str(account.id), **account.to_dict())
+    return AccountResponse(
+        id=str(account.id),
+        email=account.email,
+        firstName=account.first_name,
+        lastName=account.last_name,
+    )
