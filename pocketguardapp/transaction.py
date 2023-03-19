@@ -14,6 +14,7 @@ transaction_router = APIRouter(prefix="/transaction")
 async def create_transaction(
     request: TransactionCreateRequest, activeAccount: Account = Depends(authenticate)
 ):
+    """Create a new transaction"""
     transaction, error = transaction_service.create_transaction(
         name=request.name,
         amount=request.amount,

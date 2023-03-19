@@ -36,7 +36,8 @@ def create_transaction(
     transaction_timestamp = parse_datetime(timestamp)
     if not transaction_timestamp:
         return None, Error(
-            "invalid transaction timestamp, expects format '2009-01-01T14:01:02-04:00'", 400
+            "invalid transaction timestamp, expects format '2009-01-01T14:01:02-04:00'",
+            400,
         )
     transaction_timestamp = transaction_timestamp.astimezone(datetime.timezone.utc)
 
