@@ -1,12 +1,14 @@
 import datetime
+
+from bson.errors import InvalidId
 from bson.objectid import ObjectId
 
 from pocketguardapp.database.transaction import transaction_database
 from pocketguardapp.errors.error import Error
-from pocketguardapp.models.transaction_models import Transaction
 from pocketguardapp.models.account_models import AccountInfo
-from .shared import parse_datetime
+from pocketguardapp.models.transaction_models import Transaction
 
+from .shared import parse_datetime
 
 TRANSACTION_KIND_INCOME = "INCOME"
 TRANSACTION_KIND_EXPENSE = "EXPENSE"
@@ -53,7 +55,22 @@ def create_transaction(
 
     try:
         transaction_database.create(transaction)
-    except Exception as e:
+    except Exception:
         return None, Error("failed to create transaction", 500)
 
     return transaction, None
+
+
+def get_transaction(id: str):
+    try:
+        oid = ObjectId(id)
+        query_filter = {"_id": oid}
+
+        transaction = transaction_database.find_one(query_filter)
+
+        if not transaction:
+            return None, Error("transaction not found", 404)
+        return transaction, None
+
+    except InvalidId:
+        return None, Error("invalid id", 400)
