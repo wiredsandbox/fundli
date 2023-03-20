@@ -1,11 +1,12 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
+
+from .middlewares.middleware import authenticate
+from .models.account_models import Account, account_info_from_account
 from .schemas.transaction_schemas import (
     TransactionCreateRequest,
     transaction_response_serializer,
 )
 from .services import transaction as transaction_service
-from .models.account_models import Account, account_info_from_account
-from .middlewares.middleware import authenticate
 
 transaction_router = APIRouter(prefix="/transaction")
 
@@ -27,5 +28,18 @@ async def create_transaction(
 
     if not transaction:
         raise HTTPException(status_code=500, detail="failed to create transaction")
+
+    return transaction_response_serializer(transaction)
+
+
+@transaction_router.get("/{id}")
+async def get_transaction(id: str, activeAccount: Account = Depends(authenticate)):
+    transaction, error = transaction_service.get_transaction(id)
+
+    if error:
+        raise HTTPException(status_code=error.code, detail=error.msg)
+
+    if not transaction:
+        raise HTTPException(status_code=404, detail="transaction not found")
 
     return transaction_response_serializer(transaction)

@@ -25,13 +25,9 @@ repos:
     rev: 5.12.0  # pick the isort version you'd like to use from https://github.com/timothycrosley/isort/releases
     hooks:
     -   id: isort
-        name: isort (python)
-    -   id: isort
-        name: isort (cython)
-        types: [cython]
-    -   id: isort
-        name: isort (pyi)
-        types: [pyi]
+        args:
+        - --profile
+        - black
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
