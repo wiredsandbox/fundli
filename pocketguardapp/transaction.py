@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from .middlewares.middleware import authenticate
+from .middlewares.middleware import authenticate, pagination_options
 from .models.account_models import Account, account_info_from_account
 from .schemas.transaction_schemas import (
     TransactionCreateRequest,
@@ -49,9 +49,14 @@ async def get_transaction(id: str, activeAccount: Account = Depends(authenticate
 
 
 @transaction_router.get("")
-async def list_transactions(activeAccount: Account = Depends(authenticate)):
+async def list_transactions(
+    activeAccount: Account = Depends(authenticate),
+    pagination=Depends(pagination_options),
+):
     transactions, paginator, error = transaction_service.list_transactions(
-        page=1, per_page=30, account_info=account_info_from_account(activeAccount)
+        page=pagination["page"],
+        per_page=pagination["per_page"],
+        account_info=account_info_from_account(activeAccount),
     )
 
     if error:

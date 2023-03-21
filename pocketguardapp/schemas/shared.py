@@ -2,6 +2,7 @@ from pydantic import BaseModel
 
 from pocketguardapp.database.paginator import Paginator
 
+
 class PaginatorResponse(BaseModel):
     current_page: int
     next_page: int

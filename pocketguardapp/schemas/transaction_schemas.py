@@ -6,7 +6,10 @@ from pydantic import BaseModel
 
 from pocketguardapp.models.transaction_models import Transaction
 from pocketguardapp.database.paginator import Paginator
-from pocketguardapp.schemas.shared import PaginatorResponse, paginator_response_serializer
+from pocketguardapp.schemas.shared import (
+    PaginatorResponse,
+    paginator_response_serializer,
+)
 
 from .account_schemas import AccountInfoResponse
 
@@ -69,4 +72,3 @@ def transaction_paginate_response_serializer(
         ],
         paginator=paginator_response_serializer(paginator) if paginator else None,
     )
-
