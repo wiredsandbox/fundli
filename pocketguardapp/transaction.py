@@ -34,7 +34,9 @@ async def create_transaction(
 
 @transaction_router.get("/{id}")
 async def get_transaction(id: str, activeAccount: Account = Depends(authenticate)):
-    transaction, error = transaction_service.get_transaction(id)
+    transaction, error = transaction_service.get_transaction(
+        id, account_info_from_account(activeAccount)
+    )
 
     if error:
         raise HTTPException(status_code=error.code, detail=error.msg)

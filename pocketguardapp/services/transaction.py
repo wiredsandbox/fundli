@@ -61,10 +61,13 @@ def create_transaction(
     return transaction, None
 
 
-def get_transaction(id: str):
+def get_transaction(id: str, account_info: AccountInfo):
     try:
         oid = ObjectId(id)
         query_filter = {"_id": oid}
+
+        if account_info.id:
+            query_filter["account_info.id"] = account_info.id
 
         transaction = transaction_database.find_one(query_filter)
 
