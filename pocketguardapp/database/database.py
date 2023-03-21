@@ -1,5 +1,7 @@
 from pymongo import MongoClient
+
 from pocketguardapp.settings.settings import DATABASE_URI, DATABASE_NAME
+from pocketguardapp.database.paginator import Paginator, PaginatedResult
 
 client = MongoClient(host=DATABASE_URI)
 
@@ -17,3 +19,23 @@ class Database:
 
     def count(self, query_filter):
         return self.collection.count_documents(query_filter)
+
+    def find_paginated(self, query_filter, page, per_page):
+        """
+        find_paginated searches for documents that match the provided filters.
+        It returns a cursor as a result.
+        """
+        paginator = Paginator(page, per_page)
+        paginator.set_offset()
+
+        total_rows = self.collection.count_documents(query_filter)
+        paginator.total_rows = total_rows
+
+        cur = self.collection.find(
+            query_filter, skip=paginator.offset, limit=paginator.per_page
+        )
+
+        paginator.set_total_pages()
+        paginator.set_prev_page()
+        paginator.set_next_page()
+        return PaginatedResult(paginator, cur)

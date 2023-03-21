@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from .middlewares.middleware import authenticate
+from .middlewares.middleware import authenticate, pagination_options
 from .models.account_models import Account, account_info_from_account
 from .schemas.transaction_schemas import (
     TransactionCreateRequest,
     transaction_response_serializer,
+    transaction_paginate_response_serializer,
 )
 from .services import transaction as transaction_service
 
@@ -34,7 +35,9 @@ async def create_transaction(
 
 @transaction_router.get("/{id}")
 async def get_transaction(id: str, activeAccount: Account = Depends(authenticate)):
-    transaction, error = transaction_service.get_transaction(id)
+    transaction, error = transaction_service.get_transaction(
+        id, account_info_from_account(activeAccount)
+    )
 
     if error:
         raise HTTPException(status_code=error.code, detail=error.msg)
@@ -43,3 +46,23 @@ async def get_transaction(id: str, activeAccount: Account = Depends(authenticate
         raise HTTPException(status_code=404, detail="transaction not found")
 
     return transaction_response_serializer(transaction)
+
+
+@transaction_router.get("")
+async def list_transactions(
+    activeAccount: Account = Depends(authenticate),
+    pagination=Depends(pagination_options),
+):
+    transactions, paginator, error = transaction_service.list_transactions(
+        page=pagination["page"],
+        per_page=pagination["per_page"],
+        account_info=account_info_from_account(activeAccount),
+    )
+
+    if error:
+        raise HTTPException(status_code=error.code, detail=error.msg)
+
+    if not transactions:
+        raise HTTPException(status_code=404, detail="no transactions found")
+
+    return transaction_paginate_response_serializer(transactions, paginator)

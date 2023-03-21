@@ -2,7 +2,12 @@ from fastapi import APIRouter, HTTPException, Request, Header
 from fastapi.responses import JSONResponse
 from pocketguardapp.services.account import get_account, decode_token
 
+
 app = APIRouter()
+
+
+def pagination_options(page: int = 1, per_page: int = 30):
+    return {"page": page, "per_page": per_page}
 
 
 def authenticate(authorization: str = Header()):
