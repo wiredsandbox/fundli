@@ -1,10 +1,12 @@
 from datetime import datetime
 from enum import Enum
-from typing import List
+from typing import List, Union
 
 from pydantic import BaseModel
 
 from pocketguardapp.models.transaction_models import Transaction
+from pocketguardapp.database.paginator import Paginator
+from pocketguardapp.schemas.shared import PaginatorResponse, paginator_response_serializer
 
 from .account_schemas import AccountInfoResponse
 
@@ -31,8 +33,9 @@ class TransactionResponse(BaseModel):
     accountInfo: AccountInfoResponse
 
 
-class TransactionGetAllResponse(BaseModel):
+class TransactionPaginateResponse(BaseModel):
     transactions: List[TransactionResponse]
+    paginator: Union[PaginatorResponse, None]
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -57,9 +60,13 @@ def transaction_response_serializer(transaction: Transaction):
     )
 
 
-def transaction_get_all_response_serializer(transactions: List[Transaction]):
-    return TransactionGetAllResponse(
+def transaction_paginate_response_serializer(
+    transactions: List[Transaction], paginator: Union[Paginator, None]
+):
+    return TransactionPaginateResponse(
         transactions=[
             transaction_response_serializer(transaction) for transaction in transactions
-        ]
+        ],
+        paginator=paginator_response_serializer(paginator) if paginator else None,
     )
+

@@ -77,3 +77,18 @@ def get_transaction(id: str, account_info: AccountInfo):
 
     except InvalidId:
         return None, Error("invalid id", 400)
+
+
+def list_transactions(page: int, per_page: int, account_info: AccountInfo):
+    query_filter = {}
+
+    if account_info.id:
+        query_filter["account_info.id"] = account_info.id
+
+    transactions, paginator, error = transaction_database.paginate(
+        query_filter, page, per_page
+    )
+    if error:
+        return None, None, Error("failed to list transactions", 500)
+
+    return transactions, paginator, None
