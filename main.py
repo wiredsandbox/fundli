@@ -2,9 +2,9 @@ import uvicorn
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from pocketguardapp.account import account_router
-from pocketguardapp.transaction import transaction_router
-from pocketguardapp.settings.settings import PORT
+from fundli.account import account_router
+from fundli.transaction import transaction_router
+from fundli.settings.settings import PORT
 
 v1 = APIRouter(prefix="/v1")
 v1.include_router(account_router, tags=["Account"])

@@ -4,9 +4,9 @@ from typing import List, Union
 
 from pydantic import BaseModel
 
-from pocketguardapp.models.transaction_models import Transaction
-from pocketguardapp.database.paginator import Paginator
-from pocketguardapp.schemas.shared import (
+from fundli.models.transaction_models import Transaction
+from fundli.database.paginator import Paginator
+from fundli.schemas.shared import (
     PaginatorResponse,
     paginator_response_serializer,
 )

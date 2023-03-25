@@ -1,5 +1,5 @@
-from pocketguardapp.models.account_models import AccountInfo
-from pocketguardapp.models.transaction_models import Transaction
+from fundli.models.account_models import AccountInfo
+from fundli.models.transaction_models import Transaction
 
 from .database import Database
 

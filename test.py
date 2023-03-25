@@ -1,5 +1,5 @@
-from pocketguardapp.tests.account_test import test_hash_compare_password
-from pocketguardapp.tests.services_test import test_parse_datetime
+from fundli.tests.account_test import test_hash_compare_password
+from fundli.tests.services_test import test_parse_datetime
 
 if __name__ == "__main__":
     test_hash_compare_password()

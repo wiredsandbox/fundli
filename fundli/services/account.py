@@ -6,10 +6,10 @@ from bson.errors import InvalidId
 from bson.objectid import ObjectId
 from jose import jwt
 
-from pocketguardapp.database.account import account_database
-from pocketguardapp.errors.error import Error
-from pocketguardapp.models.account_models import Account
-from pocketguardapp.settings.settings import EMAIL_REGEX, SECRET_KEY
+from fundli.database.account import account_database
+from fundli.errors.error import Error
+from fundli.models.account_models import Account
+from fundli.settings.settings import EMAIL_REGEX, SECRET_KEY
 
 
 def create_account(email: str, password: str, first_name: str, last_name: str):
@@ -98,8 +98,8 @@ def generate_token(email, first_name, last_name):
             "name": f"{first_name} {last_name}",
             "exp": datetime.datetime.utcnow() + datetime.timedelta(days=30),
             "iat": datetime.datetime.utcnow(),
-            "iss": "pocketguard-api",
-            "aud": "pocketguard-app",
+            "iss": "fundli-api",
+            "aud": "fundli-app",
         },
         key=SECRET_KEY,
         algorithm="HS256",
@@ -115,8 +115,8 @@ def decode_token(token):
         token,
         SECRET_KEY,
         algorithms=["HS256"],
-        audience="pocketguard-app",
-        issuer="pocketguard-api",
+        audience="fundli-app",
+        issuer="fundli-api",
     )
 
 
