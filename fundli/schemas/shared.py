@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from pocketguardapp.database.paginator import Paginator
+from fundli.database.paginator import Paginator
 
 
 class PaginatorResponse(BaseModel):

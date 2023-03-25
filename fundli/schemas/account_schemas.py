@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from pocketguardapp.models.account_models import Account
+from fundli.models.account_models import Account
 
 
 class AccountRequest(BaseModel):

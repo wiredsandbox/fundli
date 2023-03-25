@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Request, Header
 from fastapi.responses import JSONResponse
-from pocketguardapp.services.account import get_account, decode_token
+from fundli.services.account import get_account, decode_token
 
 
 app = APIRouter()

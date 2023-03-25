@@ -1,4 +1,4 @@
-from pocketguardapp.models.account_models import Account
+from fundli.models.account_models import Account
 
 from .database import Database
 

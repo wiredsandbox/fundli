@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 
-from pocketguardapp.settings.settings import DATABASE_URI, DATABASE_NAME
-from pocketguardapp.database.paginator import Paginator, PaginatedResult
+from fundli.settings.settings import DATABASE_URI, DATABASE_NAME
+from fundli.database.paginator import Paginator, PaginatedResult
 
 client = MongoClient(host=DATABASE_URI)
 

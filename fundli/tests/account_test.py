@@ -1,4 +1,4 @@
-from pocketguardapp.services.account import hash_password, compare_password
+from fundli.services.account import hash_password, compare_password
 
 
 def test_hash_compare_password():
