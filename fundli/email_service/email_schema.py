@@ -13,7 +13,7 @@ class EmailSchema(BaseModel):
     email_template: Optional[EmailTemplate] = None
     subject: Optional[str]
     sender_name: Optional[str] = None
-    sender_email: str = "Uche from fundli <info@fundli.live>"
+    sender_email: str = None
     recipients: List[EmailStr]
     title: Optional[str]
     first_name: Optional[str]
