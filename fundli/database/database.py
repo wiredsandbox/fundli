@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 
-from fundli.settings.settings import DATABASE_URI, DATABASE_NAME
-from fundli.database.paginator import Paginator, PaginatedResult
+from fundli.database.paginator import PaginatedResult, Paginator
+from fundli.settings.settings import DATABASE_NAME, DATABASE_URI
 
 client = MongoClient(host=DATABASE_URI)
 
@@ -39,3 +39,6 @@ class Database:
         paginator.set_prev_page()
         paginator.set_next_page()
         return PaginatedResult(paginator, cur)
+
+    def update(self, query_filter, data):
+        self.collection.update_one(query_filter, {"$set": data})

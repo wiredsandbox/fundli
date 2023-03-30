@@ -18,6 +18,7 @@ class AccountDatabase(Database):
                 password=data.get("password"),
                 first_name=data.get("first_name"),
                 last_name=data.get("last_name"),
+                verification_code=data.get("verification_code"),
             )
         return None
 

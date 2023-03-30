@@ -13,6 +13,7 @@ class Account:
         password: str,
         first_name: str,
         last_name: str,
+        verification_code: str = None,
     ):
         self.id = id
         self.created_at = created_at
@@ -21,6 +22,7 @@ class Account:
         self.password = password
         self.first_name = first_name
         self.last_name = last_name
+        self.verification_code = verification_code
 
         # don't write these fields to the database
         self.used_projection = False
@@ -35,6 +37,7 @@ class Account:
             "password": self.password,
             "first_name": self.first_name,
             "last_name": self.last_name,
+            "verification_code": self.verification_code,
         }
         return data
 
