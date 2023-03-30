@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+<!-- start hero -->
+{% block content %}
+<tr>
+  <td align="center" bgcolor="#f3f2f1">
+    <table
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
+      width="100%"
+      style="max-width: 600px"
+    >
+      <tr>
+        <td
+          align="left"
+          bgcolor="#ffffff"
+          style="
+            padding: 36px 24px 0;
+            font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+
+          "
+        >
+          <h3
+            style="
+              margin: 0;
+              font-size: 25px;
+              font-weight: 700;
+              letter-spacing: -1px;
+              line-height: 48px;
+            "
+          >
+            Hi {{username}},
+          </h3>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<!-- end hero -->
+
+<!-- start copy block -->
+<tr>
+  <td align="center" bgcolor="#f3f2f1">
+    <table
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
+      width="100%"
+      style="max-width: 600px"
+    >
+      <!-- start copy -->
+      <tr>
+        <td
+          align="left"
+          bgcolor="#ffffff"
+          style="
+            padding: 24px;
+            font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 24px;
+          "
+        >
+          <p style="margin: 0">Your password has been reset!</p>
+        </td>
+      </tr>
+      <!-- end copy -->
+    </table>
+  </td>
+</tr>
+<!-- end copy block -->
+
+<!-- start copy block (sender) -->
+<tr>
+  <td align="center" bgcolor="#f3f2f1">
+    <table
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
+      width="100%"
+      style="max-width: 600px"
+    >
+      <!-- start copy -->
+      <tr>
+        <td
+          align="left"
+          bgcolor="#ffffff"
+          style="
+            padding: 24px;
+            font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 24px;
+          "
+        >
+          <p style="margin: 0">Regards,<br />The Fundli Team</p>
+        </td>
+      </tr>
+      <!-- end copy -->
+    </table>
+    <!--[if (gte mso 9)|(IE)]>
+            </td>
+            </tr>
+            </table>
+            <![endif]-->
+  </td>
+</tr>
+<!-- end copy block (sender) -->
+{% endblock %}
