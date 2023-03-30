@@ -7,6 +7,7 @@ from pydantic import BaseModel, EmailStr
 class EmailTemplate(str, Enum):
     welcome = "welcome.html"
     password_reset = "password_reset.html"
+    email_verification = "email_verification.html"
 
 
 class EmailSchema(BaseModel):
@@ -19,3 +20,7 @@ class EmailSchema(BaseModel):
     first_name: Optional[str]
     body: Optional[str] = None
     description: Optional[str] = None
+
+
+class EmailResponse(BaseModel):
+    message: str

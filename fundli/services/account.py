@@ -1,5 +1,6 @@
 import datetime
 import re
+from random import randint
 
 import bcrypt
 from bson.errors import InvalidId
@@ -7,6 +8,8 @@ from bson.objectid import ObjectId
 from jose import jwt
 
 from fundli.database.account import account_database
+from fundli.email_service.email_schema import EmailResponse, EmailSchema
+from fundli.email_service.email_service import send_email
 from fundli.errors.error import Error
 from fundli.models.account_models import Account
 from fundli.settings.settings import EMAIL_REGEX, SECRET_KEY
@@ -125,3 +128,76 @@ def is_valid_email(email):
     if re.fullmatch(EMAIL_REGEX, email):
         return True
     return False
+
+
+def generate_verification_code(n: int):
+    range_start = 10 ** (n - 1)
+    range_end = (10**n) - 1
+    return randint(range_start, range_end)
+
+
+def forgot_password(email: str, code: str):
+    if not is_valid_email(email):
+        return None, Error("invalid email", 400)
+
+    account, error = get_account(email)
+    if error:
+        return None, error
+    if not account:
+        return None, Error("account not found", 404)
+
+    update_query = {"verification_code": code}
+    query = {"_id": account.id}
+    try:
+        account_database.update(query, update_query)
+    except Exception as e:
+        print(e)
+        return None, Error("failed to update account", 500)
+    return send_verification_code(account, code), None
+
+
+def send_verification_code(account: Account, code: str):
+    send_email(
+        EmailSchema(
+            recipients=[account.email],
+            subject="Fundli Verification Code",
+            body=code,
+            sender_email="info@fundli.live",
+            sender_name="Favour from Fundli",
+            first_name=account.first_name,
+            email_template="password_reset.html",
+        )
+    )
+
+    return EmailResponse(message="Verification code sent successfull")
+
+
+def verify_code(account: Account, code: str):
+    if account.verification_code == code:
+        return True, None
+    return False, Error("invalid verification code", 400)
+
+
+def reset_password(email: str, password: str, code: str):
+    if not is_valid_email(email):
+        return None, Error("invalid email", 400)
+
+    account, error = get_account(email)
+    if error:
+        return None, error
+    if not account:
+        return None, Error("account not found", 404)
+
+    verify_code, error = verify_code(account, code)
+    if error:
+        return None, error
+
+    update_query = {"password": hash_password(password)}
+    query = {"_id": account.id}
+
+    try:
+        account_database.update(query, update_query)
+    except Exception as e:
+        print(e)
+        return None, Error("failed to update account", 500)
+    return True, None

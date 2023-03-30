@@ -1,16 +1,18 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
+
+from fundli.email_service.email_schema import EmailResponse
+
+from .middlewares.middleware import authenticate
+from .models.account_models import Account
 from .schemas.account_schemas import (
-    AccountRequest,
-    AccountLoginRequest,
     AccountAuthResponse,
+    AccountLoginRequest,
+    AccountRequest,
     AccountResponse,
     account_auth_response_serializer,
     account_response_serializer,
 )
 from .services import account as account_service
-from .models.account_models import Account
-from .middlewares.middleware import authenticate
-
 
 account_router = APIRouter(prefix="/account")
 
@@ -170,3 +172,71 @@ async def get_me(activeAccount: Account = Depends(authenticate)):
                     }
     """
     return account_response_serializer(activeAccount)
+
+
+@account_router.get("/forgot-password", response_model=EmailResponse)
+async def forgot_password(email: str):
+    """
+    intro-->
+
+        This endpoint is used to send a password reset email to the account with the specified email. It takes in a request body with the following fields:
+
+    paramDesc-->
+
+            reqBody-->email-->The email of the account
+
+    returnDesc-->
+
+            On success, the endpoint returns a success message with the following fields:
+
+    paramDesc-->
+
+            msg-->The success message
+
+            example-->
+
+                message:{
+                    "msg": "password reset email sent"
+                    }
+    """
+    forgot_password_email, error = account_service.forgot_password(
+        email, code=account_service.generate_verification_code(6)
+    )
+    if error:
+        raise HTTPException(status_code=error.code, detail=error.msg)
+
+    return forgot_password_email
+
+
+@account_router.get("/reset-password", response_model=EmailResponse)
+async def reset_password(email: str, code: str, password: str):
+    """
+    intro-->
+
+        This endpoint is used to reset the password of the account with the specified email. It takes in a request body with the following fields:
+
+    paramDesc-->
+
+            reqBody-->email-->The email of the account
+            reqBody-->code-->The verification code sent to the account
+            reqBody-->password-->The new password of the account
+
+    returnDesc-->
+
+            On success, the endpoint returns a success message with the following fields:
+
+    paramDesc-->
+
+            msg-->The success message
+
+            example-->
+
+                message:{
+                    "msg": "password reset successful"
+                    }
+    """
+    reset_password_email, error = account_service.reset_password(email, code, password)
+    if error:
+        raise HTTPException(status_code=error.code, detail=error.msg)
+
+    return reset_password_email

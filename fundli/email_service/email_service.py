@@ -21,7 +21,11 @@ def send_email(body: EmailSchema):
             "to": body.recipients,
             "html": render_template(
                 body.email_template.value,
-                {"username": body.first_name, "logo_url": DOMAIN_NAME + "/files/logo"},
+                {
+                    "verification_code": body.body,
+                    "username": body.first_name,
+                    "logo_url": DOMAIN_NAME + "/files/logo",
+                },
             ),
         },
     )
@@ -46,4 +50,7 @@ def render_template(template_name: str, context: dict):
     template = EMAIL_FILE_PATH.get_template(template_name)
 
     # render the template
+    # write the template to a file
+    with open("email.html", "w") as f:
+        f.write(template.render(context))
     return template.render(context)
