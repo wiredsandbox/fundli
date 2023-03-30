@@ -208,8 +208,10 @@ async def forgot_password(email: str):
     return forgot_password_email
 
 
-@account_router.get("/reset-password", response_model=EmailResponse)
-async def reset_password(email: str, code: str, password: str):
+@account_router.get(
+    "/reset-password{email}/{code}/{password}", response_model=EmailResponse
+)
+async def reset_password(email: str, code: int, password: str):
     """
     intro-->
 
@@ -235,8 +237,8 @@ async def reset_password(email: str, code: str, password: str):
                     "msg": "password reset successful"
                     }
     """
-    reset_password_email, error = account_service.reset_password(email, code, password)
+    _, error = account_service.reset_password(email, password, code)
     if error:
         raise HTTPException(status_code=error.code, detail=error.msg)
 
-    return reset_password_email
+    return EmailResponse(message="password reset successful")

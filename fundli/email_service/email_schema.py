@@ -8,6 +8,7 @@ class EmailTemplate(str, Enum):
     welcome = "welcome.html"
     password_reset = "password_reset.html"
     email_verification = "email_verification.html"
+    success = "success.html"
 
 
 class EmailSchema(BaseModel):

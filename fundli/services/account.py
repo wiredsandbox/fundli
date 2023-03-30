@@ -136,7 +136,7 @@ def generate_verification_code(n: int):
     return randint(range_start, range_end)
 
 
-def forgot_password(email: str, code: str):
+def forgot_password(email: str, code: int):
     if not is_valid_email(email):
         return None, Error("invalid email", 400)
 
@@ -156,7 +156,7 @@ def forgot_password(email: str, code: str):
     return send_verification_code(account, code), None
 
 
-def send_verification_code(account: Account, code: str):
+def send_verification_code(account: Account, code: int):
     send_email(
         EmailSchema(
             recipients=[account.email],
@@ -172,13 +172,13 @@ def send_verification_code(account: Account, code: str):
     return EmailResponse(message="Verification code sent successfull")
 
 
-def verify_code(account: Account, code: str):
+def verify_code(account: Account, code: int):
     if account.verification_code == code:
         return True, None
     return False, Error("invalid verification code", 400)
 
 
-def reset_password(email: str, password: str, code: str):
+def reset_password(email: str, password: str, code: int):
     if not is_valid_email(email):
         return None, Error("invalid email", 400)
 
@@ -188,7 +188,7 @@ def reset_password(email: str, password: str, code: str):
     if not account:
         return None, Error("account not found", 404)
 
-    verify_code, error = verify_code(account, code)
+    _, error = verify_code(account, code)
     if error:
         return None, error
 
@@ -200,4 +200,17 @@ def reset_password(email: str, password: str, code: str):
     except Exception as e:
         print(e)
         return None, Error("failed to update account", 500)
-    return True, None
+    return (
+        send_email(
+            EmailSchema(
+                recipients=[account.email],
+                subject="Fundli Password Reset",
+                body="Your password has been reset successfully",
+                sender_email="info@fundli.live",
+                sender_name="Favour from Fundli",
+                first_name=account.first_name,
+                email_template="success.html",
+            )
+        ),
+        None,
+    )
