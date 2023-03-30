@@ -146,10 +146,10 @@ def forgot_password(email: str, code: int):
     if not account:
         return None, Error("account not found", 404)
 
-    update_query = {"verification_code": code}
+    account_update = {"verification_code": code}
     query = {"_id": account.id}
     try:
-        account_database.update(query, update_query)
+        account_database.update(query, account_update)
     except Exception as e:
         print(e)
         return None, Error("failed to update account", 500)
@@ -192,11 +192,11 @@ def reset_password(email: str, password: str, code: int):
     if error:
         return None, error
 
-    update_query = {"password": hash_password(password)}
+    account_update = {"password": hash_password(password)}
     query = {"_id": account.id}
 
     try:
-        account_database.update(query, update_query)
+        account_database.update(query, account_update)
     except Exception as e:
         print(e)
         return None, Error("failed to update account", 500)

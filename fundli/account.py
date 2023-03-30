@@ -7,6 +7,7 @@ from .models.account_models import Account
 from .schemas.account_schemas import (
     AccountAuthResponse,
     AccountLoginRequest,
+    AccountPasswordResetRequest,
     AccountRequest,
     AccountResponse,
     account_auth_response_serializer,
@@ -208,10 +209,8 @@ async def forgot_password(email: str):
     return forgot_password_email
 
 
-@account_router.get(
-    "/reset-password{email}/{code}/{password}", response_model=EmailResponse
-)
-async def reset_password(email: str, code: int, password: str):
+@account_router.post("/reset-password/", response_model=EmailResponse)
+async def reset_password(request: AccountPasswordResetRequest):
     """
     intro-->
 
@@ -237,7 +236,9 @@ async def reset_password(email: str, code: int, password: str):
                     "msg": "password reset successful"
                     }
     """
-    _, error = account_service.reset_password(email, password, code)
+    _, error = account_service.reset_password(
+        request.email, request.password, request.code
+    )
     if error:
         raise HTTPException(status_code=error.code, detail=error.msg)
 

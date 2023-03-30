@@ -45,6 +45,12 @@ class AccountResponse(BaseModel):
     lastName: str
 
 
+class AccountPasswordResetRequest(BaseModel):
+    email: str
+    code: str
+    password: str
+
+
 # ---------------------------------------------------------------------------------------------------------------
 #                                             Serializers
 # ---------------------------------------------------------------------------------------------------------------
