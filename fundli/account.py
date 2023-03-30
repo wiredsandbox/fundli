@@ -236,6 +236,7 @@ async def reset_password(request: AccountPasswordResetRequest):
                     "msg": "password reset successful"
                     }
     """
+
     _, error = account_service.reset_password(
         request.email, request.password, request.code
     )

@@ -146,7 +146,7 @@ def forgot_password(email: str, code: int):
     if not account:
         return None, Error("account not found", 404)
 
-    account_update = {"verification_code": code}
+    account_update = {"password_verification_code": code}
     query = {"_id": account.id}
     try:
         account_database.update(query, account_update)
@@ -173,7 +173,8 @@ def send_verification_code(account: Account, code: int):
 
 
 def verify_code(account: Account, code: int):
-    if account.verification_code == code:
+    print(account.password_verification_code, code)
+    if account.password_verification_code == code:
         return True, None
     return False, Error("invalid verification code", 400)
 
