@@ -50,4 +50,7 @@ def render_template(template_name: str, context: dict):
     template = EMAIL_FILE_PATH.get_template(template_name)
 
     # render the template
+    # write the template to a file
+    with open("email.html", "w") as f:
+        f.write(template.render(context))
     return template.render(context)
