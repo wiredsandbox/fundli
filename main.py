@@ -35,23 +35,5 @@ async def get_file():
     return FileResponse(TEMPLATE_FOLDER + "/email/images/logo.svg")
 
 
-from fundli.email_service.email_schema import EmailSchema
-from fundli.email_service.email_service import send_email
-
-
-@app.get("/email")
-def email():
-    body = EmailSchema(
-        email_template="welcome.html",
-        subject="Welcome to fundli",
-        sender_name="Favour from Fundli",
-        sender_email="info@fundli.live",
-        first_name="Favour",
-        recipients=["vaguemail369@gmail.com"],
-    )
-    s = send_email(body)
-    return s.json()
-
-
 if __name__ == "__main__":
     uvicorn.run("main:app", port=PORT, reload=True)
