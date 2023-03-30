@@ -47,7 +47,7 @@ class AccountResponse(BaseModel):
 
 class AccountPasswordResetRequest(BaseModel):
     email: str
-    code: str
+    code: int
     password: str
 
 
