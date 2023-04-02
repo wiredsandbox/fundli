@@ -175,8 +175,8 @@ async def get_me(activeAccount: Account = Depends(authenticate)):
     return account_response_serializer(activeAccount)
 
 
-@account_router.get("/forgot-password", response_model=EmailResponse)
-async def forgot_password(email: str):
+@account_router.post("/forgot-password", response_model=EmailResponse)
+async def forgot_password(request: AccountPasswordResetRequest):
     """
     intro-->
 
@@ -201,7 +201,7 @@ async def forgot_password(email: str):
                     }
     """
     forgot_password_email, error = account_service.forgot_password(
-        email, code=account_service.generate_verification_code(6)
+        request.email, code=account_service.generate_verification_code(6)
     )
     if error:
         raise HTTPException(status_code=error.code, detail=error.msg)

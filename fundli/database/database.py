@@ -40,5 +40,5 @@ class Database:
         paginator.set_next_page()
         return PaginatedResult(paginator, cur)
 
-    def update(self, query_filter, data):
+    def find_one_and_replace(self, query_filter, data):
         self.collection.update_one(query_filter, {"$set": data})
