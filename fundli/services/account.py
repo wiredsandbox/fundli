@@ -60,6 +60,7 @@ def get_account(idOrEmail):
         query_filter["email"] = idOrEmail
 
     account = account_database.find_one(query_filter)
+
     if not account:
         return None, Error("account not found", 404)
 
@@ -149,7 +150,7 @@ def forgot_password(email: str, code: int):
     account.password_verification_code = code
     query = {"_id": account.id}
     try:
-        account_database.find_one_and_replace(query, account.to_dict())
+        account_database.update(query, account.to_dict())
     except Exception as e:
         print(e)
         return None, Error("failed to update account", 500)
@@ -178,25 +179,20 @@ def verify_code(account: Account, code: int):
     return False, Error("invalid verification code", 400)
 
 
-def reset_password(email: str, password: str, code: int):
+def reset_password(email: str, password: str, code: int, account: Account):
     if not is_valid_email(email):
         return None, Error("invalid email", 400)
 
-    account, error = get_account(email)
-    if error:
-        return None, error
-    if not account:
-        return None, Error("account not found", 404)
+    old_account_obj = account
 
     _, error = verify_code(account, code)
     if error:
         return None, error
 
     account.password = hash_password(password)
-    query = {"_id": account.id}
 
     try:
-        account_database.find_one_and_replace(query, account.to_dict())
+        account_database.update(old_account_obj.to_dict(), account.to_dict())
     except Exception as e:
         print(e)
         return None, Error("failed to update account", 500)
