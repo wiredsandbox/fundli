@@ -19,6 +19,7 @@ def create_transaction(
     amount: float,
     timestamp: str,
     kind: str,
+    tags: list,
     account_info: AccountInfo,
 ):
     """
@@ -50,6 +51,7 @@ def create_transaction(
         name=name,
         amount=int(amount * 100),
         kind=kind,
+        tags=tags,
         account_info=account_info,
     )
 
@@ -92,3 +94,49 @@ def list_transactions(page: int, per_page: int, account_info: AccountInfo):
         return None, None, Error("failed to list transactions", 500)
 
     return transactions, paginator, None
+
+
+def update_transaction(
+    name: str = None,
+    amount: float = None,
+    timestamp: str = None,
+    kind: str = None,
+    tags: list = None,
+    transaction: Transaction = None,
+):
+    old_transaction = transaction
+    if name is not None:
+        transaction.name = name
+
+    if amount is not None:
+        transaction.amount = int(amount * 100)
+
+    if timestamp is not None:
+        transaction_timestamp = parse_datetime(timestamp)
+        if not transaction_timestamp:
+            return None, Error(
+                "invalid transaction timestamp, expects format '2009-01-01T14:01:02-04:00'",
+                400,
+            )
+        transaction_timestamp = transaction_timestamp.astimezone(datetime.timezone.utc)
+        transaction.created_at = transaction_timestamp
+
+    if kind is not None:
+        if kind.upper() not in (TRANSACTION_KIND_INCOME, TRANSACTION_KIND_EXPENSE):
+            return None, Error("invalid transaction kind", 400)
+        transaction.kind = kind.upper()
+
+    if tags is not None:
+        # create property for tags
+        transaction.tags += tags
+
+    transaction.updated_at = datetime.datetime.utcnow()
+
+    # if old_transaction.tags == [] or old_transaction.tags is None:
+    #     del old_transaction.tags
+
+    try:
+        transaction_database.update(old_transaction.to_dict(), transaction.to_dict())
+    except Exception:
+        return None, Error("failed to update transaction", 500)
+    return transaction, None
