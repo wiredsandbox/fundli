@@ -36,4 +36,5 @@ async def get_file():
 
 
 if __name__ == "__main__":
+    # start app
     uvicorn.run("main:app", port=PORT, reload=True)

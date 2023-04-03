@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 from fundli.models.account_models import Account
@@ -43,6 +45,12 @@ class AccountResponse(BaseModel):
     email: str
     firstName: str
     lastName: str
+
+
+class AccountPasswordResetRequest(BaseModel):
+    email: str
+    code: Optional[int]
+    password: Optional[str]
 
 
 # ---------------------------------------------------------------------------------------------------------------

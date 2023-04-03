@@ -17,7 +17,7 @@ def get_file_base_path(template_folder: str):
 
 
 PORT = config("PORT", default=7000, cast=int)
-DOMAIN_NAME = str(config("DOMAIN_NAME")) + str(PORT)
+DOMAIN_NAME = str(config("DOMAIN_NAME"))
 EMAIL_REGEX = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b"
 SECRET_KEY = str(config("SECRET_KEY"))
 DATABASE_URI = str(config("DATABASE_URI"))

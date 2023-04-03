@@ -21,7 +21,11 @@ def send_email(body: EmailSchema):
             "to": body.recipients,
             "html": render_template(
                 body.email_template.value,
-                {"username": body.first_name, "logo_url": DOMAIN_NAME + "/files/logo"},
+                {
+                    "verification_code": body.body,
+                    "username": body.first_name,
+                    "logo_url": DOMAIN_NAME + "/files/logo",
+                },
             ),
         },
     )
