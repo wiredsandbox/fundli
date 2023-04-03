@@ -104,7 +104,6 @@ def update_transaction(
     tags: list = None,
     transaction: Transaction = None,
 ):
-    old_transaction = transaction
     if name is not None:
         transaction.name = name
 
@@ -132,11 +131,8 @@ def update_transaction(
 
     transaction.updated_at = datetime.datetime.utcnow()
 
-    # if old_transaction.tags == [] or old_transaction.tags is None:
-    #     del old_transaction.tags
-
     try:
-        transaction_database.update(old_transaction.to_dict(), transaction.to_dict())
+        transaction_database.update({"_id": transaction.id}, transaction.to_dict())
+        return transaction, None
     except Exception:
         return None, Error("failed to update transaction", 500)
-    return transaction, None

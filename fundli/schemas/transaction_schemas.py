@@ -18,9 +18,9 @@ class TransactionKind(str, Enum):
 
 class TransactionCreateRequest(BaseModel):
     name: Optional[str]
-    amount: Optional[float]
-    timestamp: Optional[str]
-    kind: Optional[TransactionKind]
+    amount: float
+    timestamp: str
+    kind: TransactionKind
     tags: Optional[List[str]]
 
 

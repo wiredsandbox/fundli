@@ -37,5 +37,6 @@ class Transaction:
             "name": self.name,
             "amount": self.amount,
             "kind": self.kind,
+            "tags": self.tags,
             "account_info": self.account_info.to_dict(),
         }
