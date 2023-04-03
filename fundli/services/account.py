@@ -137,16 +137,7 @@ def generate_verification_code(n: int):
     return randint(range_start, range_end)
 
 
-def forgot_password(email: str, code: int):
-    if not is_valid_email(email):
-        return None, Error("invalid email", 400)
-
-    account, error = get_account(email)
-    if error:
-        return None, error
-    if not account:
-        return None, Error("account not found", 404)
-
+def forgot_password(code: int, account: Account):
     account.password_verification_code = code
     query = {"_id": account.id}
     try:
@@ -179,10 +170,7 @@ def verify_code(account: Account, code: int):
     return False, Error("invalid verification code", 400)
 
 
-def reset_password(email: str, password: str, code: int, account: Account):
-    if not is_valid_email(email):
-        return None, Error("invalid email", 400)
-
+def reset_password(password: str, code: int, account: Account):
     old_account_obj = account
 
     _, error = verify_code(account, code)
