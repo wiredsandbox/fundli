@@ -1,15 +1,12 @@
 from datetime import datetime
 from enum import Enum
-from typing import List, Union
+from typing import List, Optional, Union
 
 from pydantic import BaseModel
 
-from fundli.models.transaction_models import Transaction
 from fundli.database.paginator import Paginator
-from fundli.schemas.shared import (
-    PaginatorResponse,
-    paginator_response_serializer,
-)
+from fundli.models.transaction_models import Transaction
+from fundli.schemas.shared import PaginatorResponse, paginator_response_serializer
 
 from .account_schemas import AccountInfoResponse
 
@@ -20,10 +17,19 @@ class TransactionKind(str, Enum):
 
 
 class TransactionCreateRequest(BaseModel):
-    name: str
+    name: Optional[str]
     amount: float
     timestamp: str
     kind: TransactionKind
+    tags: Optional[List[str]]
+
+
+class TransactionUpdateRequest(BaseModel):
+    name: str = None
+    amount: float = None
+    timestamp: str = None
+    kind: TransactionKind = None
+    tags: List[str] = None
 
 
 class TransactionResponse(BaseModel):
@@ -33,6 +39,7 @@ class TransactionResponse(BaseModel):
     name: str
     amount: float
     kind: str
+    tags: List[str]
     accountInfo: AccountInfoResponse
 
 
@@ -54,6 +61,7 @@ def transaction_response_serializer(transaction: Transaction):
         name=transaction.name,
         amount=(transaction.amount / 100),
         kind=transaction.kind,
+        tags=transaction.tags or [],
         accountInfo=AccountInfoResponse(
             id=str(transaction.account_info.id),
             email=transaction.account_info.email,

@@ -18,6 +18,7 @@ class TransactionDatabase(Database):
                 name=data.get("name"),
                 amount=data.get("amount"),
                 kind=data.get("kind"),
+                tags=data.get("tags"),
                 account_info=AccountInfo(
                     id=data.get("account_info").get("id"),
                     email=data.get("account_info").get("email"),
@@ -39,6 +40,7 @@ class TransactionDatabase(Database):
                 name=data.get("name"),
                 amount=data.get("amount"),
                 kind=data.get("kind"),
+                tags=data.get("tags"),
                 account_info=AccountInfo(
                     id=data.get("account_info", {}).get("id"),
                     email=data.get("account_info", {}).get("email"),
