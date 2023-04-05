@@ -16,6 +16,7 @@ class Transaction:
         kind: str,
         tags: list,
         account_info: AccountInfo,
+        wallet_id: ObjectId,
     ):
         self.id = id
         self.created_at = created_at
@@ -25,6 +26,7 @@ class Transaction:
         self.kind = kind
         self.tags = tags or []
         self.account_info = account_info
+        self.wallet_id = wallet_id
 
         # don't write these fields to the database
         self.used_projection = False
@@ -39,4 +41,5 @@ class Transaction:
             "kind": self.kind,
             "tags": self.tags,
             "account_info": self.account_info.to_dict(),
+            "wallet_id": self.wallet_id,
         }

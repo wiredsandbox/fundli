@@ -21,6 +21,7 @@ def create_transaction(
     kind: str,
     tags: list,
     account_info: AccountInfo,
+    wallet_id: str,
 ):
     """
     create_transaction creates a new transaction.
@@ -44,6 +45,11 @@ def create_transaction(
         )
     transaction_timestamp = transaction_timestamp.astimezone(datetime.timezone.utc)
 
+    try:
+        wid = ObjectId(wallet_id)
+    except InvalidId:
+        return None, Error("invalid wallet id", 400)
+
     transaction = Transaction(
         id=ObjectId(),
         created_at=transaction_timestamp,
@@ -53,6 +59,7 @@ def create_transaction(
         kind=kind,
         tags=tags,
         account_info=account_info,
+        wallet_id=wid
     )
 
     try:
@@ -103,6 +110,7 @@ def update_transaction(
     kind: str = None,
     tags: list = None,
     transaction: Transaction = None,
+    wallet_id: str = None,
 ):
     if name is not None:
         transaction.name = name
@@ -128,6 +136,13 @@ def update_transaction(
     if tags is not None:
         # create property for tags
         transaction.tags += tags
+
+    if wallet_id:
+        try:
+            wid = ObjectId(wallet_id)
+        except InvalidId:
+            return None, Error("invalid wallet id", 400)
+        transaction.wallet_id = wid
 
     transaction.updated_at = datetime.datetime.utcnow()
 
