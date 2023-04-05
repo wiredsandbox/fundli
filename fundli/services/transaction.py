@@ -59,7 +59,7 @@ def create_transaction(
         kind=kind,
         tags=tags,
         account_info=account_info,
-        wallet_id=wid
+        wallet_id=wid,
     )
 
     try:

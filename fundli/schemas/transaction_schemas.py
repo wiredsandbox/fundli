@@ -71,7 +71,7 @@ def transaction_response_serializer(transaction: Transaction):
             firstName=transaction.account_info.first_name,
             lastName=transaction.account_info.last_name,
         ),
-        wallet_id= str(transaction.wallet_id),
+        wallet_id=str(transaction.wallet_id),
     )
 
 
