@@ -3,13 +3,15 @@ from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-from fundli.account import account_router
 from fundli.settings.settings import PORT, TEMPLATE_FOLDER
+from fundli.account import account_router
 from fundli.transaction import transaction_router
+from fundli.wallet import wallet_router
 
 v1 = APIRouter(prefix="/v1")
 v1.include_router(account_router, tags=["Account"])
 v1.include_router(transaction_router, tags=["Transaction"])
+v1.include_router(wallet_router, tags=["Wallet"])
 
 app = FastAPI()
 

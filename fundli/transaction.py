@@ -10,6 +10,7 @@ from .schemas.transaction_schemas import (
 )
 from .services import transaction as transaction_service
 
+
 transaction_router = APIRouter(prefix="/transaction")
 
 
@@ -25,6 +26,7 @@ async def create_transaction(
         kind=request.kind,
         tags=request.tags,
         account_info=account_info_from_account(activeAccount),
+        wallet_id=request.wallet_id,
     )
     if error:
         raise HTTPException(status_code=error.code, detail=error.msg)
@@ -90,6 +92,7 @@ async def update_transaction(
         kind=request.kind,
         tags=request.tags,
         transaction=transaction_acc,
+        wallet_id=request.wallet_id,
     )
 
     if error:

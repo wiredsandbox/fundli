@@ -21,6 +21,7 @@ class TransactionCreateRequest(BaseModel):
     amount: float
     timestamp: str
     kind: TransactionKind
+    wallet_id: str
     tags: Optional[List[str]]
 
 
@@ -30,6 +31,7 @@ class TransactionUpdateRequest(BaseModel):
     timestamp: str = None
     kind: TransactionKind = None
     tags: List[str] = None
+    wallet_id: str
 
 
 class TransactionResponse(BaseModel):
@@ -41,6 +43,7 @@ class TransactionResponse(BaseModel):
     kind: str
     tags: List[str]
     accountInfo: AccountInfoResponse
+    wallet_id: str
 
 
 class TransactionPaginateResponse(BaseModel):
@@ -68,6 +71,7 @@ def transaction_response_serializer(transaction: Transaction):
             firstName=transaction.account_info.first_name,
             lastName=transaction.account_info.last_name,
         ),
+        wallet_id=str(transaction.wallet_id),
     )
 
 
