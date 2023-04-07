@@ -17,7 +17,6 @@ async def create_wallet(
     request: WalletCreateRequest, activeAccount: Account = Depends(authenticate)
 ):
     """Create a new wallet"""
-    print("Explicit is better than implicit python")
     wallet, error = wallet_service.create_wallet(
         name=request.name,
         account_info=account_info_from_account(activeAccount),
