@@ -3,8 +3,8 @@ from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-from fundli.settings.settings import PORT, TEMPLATE_FOLDER
 from fundli.account import account_router
+from fundli.settings.settings import PORT, TEMPLATE_FOLDER
 from fundli.transaction import transaction_router
 from fundli.wallet import wallet_router
 
@@ -35,24 +35,6 @@ async def root():
 @app.get("/files/logo")
 async def get_file():
     return FileResponse(TEMPLATE_FOLDER + "/email/images/logo.svg")
-
-
-from fundli.email_service.email_schema import EmailSchema
-from fundli.email_service.email_service import send_email
-
-
-@app.get("/email")
-def email():
-    body = EmailSchema(
-        email_template="welcome.html",
-        subject="Welcome to fundli",
-        sender_name="Favour from Fundli",
-        sender_email="info@fundli.live",
-        first_name="Favour",
-        recipients=["vaguemail369@gmail.com"],
-    )
-    s = send_email(body)
-    return s.json()
 
 
 if __name__ == "__main__":
