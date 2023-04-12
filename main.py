@@ -3,8 +3,8 @@ from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-from fundli.settings.settings import PORT, TEMPLATE_FOLDER
 from fundli.account import account_router
+from fundli.settings.settings import PORT, TEMPLATE_FOLDER
 from fundli.transaction import transaction_router
 from fundli.wallet import wallet_router
 

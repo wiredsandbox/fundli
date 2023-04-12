@@ -25,6 +25,7 @@ class TransactionDatabase(Database):
                     first_name=data.get("account_info").get("first_name"),
                     last_name=data.get("account_info").get("last_name"),
                 ),
+                wallet_id=data.get("wallet_id"),
             )
         return None
 
@@ -47,6 +48,7 @@ class TransactionDatabase(Database):
                     first_name=data.get("account_info", {}).get("first_name"),
                     last_name=data.get("account_info", {}).get("last_name"),
                 ),
+                wallet_id=data.get("wallet_id"),
             )
             transactions.append(transaction)
 
