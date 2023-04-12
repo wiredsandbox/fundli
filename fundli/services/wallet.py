@@ -53,3 +53,16 @@ def get_wallet(identifier: str, account_info: AccountInfo):
         return None, Error("wallet not found", 404)
 
     return wallet, None
+
+
+def list_wallets(page: int, per_page: int, account_info: AccountInfo):
+    query_filter = {}
+
+    if account_info.id:
+        query_filter["account_info.id"] = account_info.id
+
+    wallets, paginator, error = wallet_database.paginate(query_filter, page, per_page)
+    if error:
+        return None, None, Error("failed to list wallets", 500)
+
+    return wallets, paginator, None

@@ -1,6 +1,7 @@
 .PHONY: test commit service
 
-all:  test commit service
+service:
+	python main.py
 
 test:
 	python test.py
@@ -9,8 +10,7 @@ commit:
 	git add .
 	git commit
 
-service:
-	python main.py
+fmt:
+	python -m black .
 
-deploy:
-	git push heroku main
+all:  test commit service
