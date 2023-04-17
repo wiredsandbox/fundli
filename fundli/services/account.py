@@ -149,33 +149,27 @@ def forgot_password(code: int, account: Account):
 
 
 def send_verification_code(account: Account, code: int):
-    send_email(
+    return send_email(
         EmailSchema(
             recipients=[account.email],
             subject="Fundli Verification Code",
             body=code,
-            sender_email="info@fundli.live",
+            sender_email="support@fundli.live",
             sender_name="Favour from Fundli",
             first_name=account.first_name,
             email_template="password_reset.html",
         )
     )
 
-    return EmailResponse(message="Verification code sent successfull")
-
-
 def verify_code(account: Account, code: int):
+    
     if account.password_verification_code == code:
         return True, None
     return False, Error("invalid verification code", 400)
 
 
-def reset_password(password: str, code: int, account: Account):
+def reset_password(password: str,  account: Account):
     old_account_obj = account
-
-    _, error = verify_code(account, code)
-    if error:
-        return None, error
 
     account.password = hash_password(password)
 

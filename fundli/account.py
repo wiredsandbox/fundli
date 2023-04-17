@@ -175,6 +175,7 @@ async def get_me(activeAccount: Account = Depends(authenticate)):
     return account_response_serializer(activeAccount)
 
 
+
 @account_router.post("/forgot-password", response_model=EmailResponse)
 async def forgot_password(request: AccountPasswordResetRequest):
     """
@@ -210,6 +211,40 @@ async def forgot_password(request: AccountPasswordResetRequest):
     return forgot_password_email
 
 
+@account_router.post("/verify-code")
+def verify_code(request:AccountPasswordResetRequest):
+    """
+    intro-->
+
+        This endpoint is used to verify a verification code. It takes in a query parameter with the following fields:
+
+    paramDesc-->
+
+            reqBody-->code-->The verification code to verify
+            reqBody-->email-->The email of the account
+
+    returnDesc-->
+
+            On success, the endpoint returns a success message with the following fields:
+
+    paramDesc-->
+
+            msg-->The success message
+
+            example-->
+
+                message:{
+                    "msg": "code verified"
+                    }
+    """
+
+    _, err = account_service.verify_code(account_service.get_account(request.email)[0], request.code)
+
+    if err:
+        raise HTTPException(status_code=err.code, detail=err.msg)
+    return {"msg": "code verified"}
+
+
 @account_router.post("/reset-password/", response_model=EmailResponse)
 async def reset_password(request: AccountPasswordResetRequest):
     """
@@ -220,7 +255,6 @@ async def reset_password(request: AccountPasswordResetRequest):
     paramDesc-->
 
             reqBody-->email-->The email of the account
-            reqBody-->code-->The verification code sent to the account
             reqBody-->password-->The new password of the account
 
     returnDesc-->
@@ -239,7 +273,7 @@ async def reset_password(request: AccountPasswordResetRequest):
     """
     account = account_service.get_account(request.email)[0]
 
-    _, error = account_service.reset_password(request.password, request.code, account)
+    _, error = account_service.reset_password(request.password, account)
     if error:
         raise HTTPException(status_code=error.code, detail=error.msg)
 
