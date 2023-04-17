@@ -8,8 +8,7 @@ from fundli.settings.settings import (
     MAIL_URL,
 )
 
-from .email_schema import EmailSchema, EmailResponse
-
+from .email_schema import EmailResponse, EmailSchema
 
 # fucntion to send email based on the template
 # def send_email(body: EmailSchema):
@@ -53,6 +52,7 @@ def render_template(template_name: str, context: dict):
     # render the template
     return template.render(context)
 
+
 def send_email(body: EmailSchema):
     res = requests.post(
         f"{MAIL_URL}",
@@ -75,6 +75,7 @@ def send_email(body: EmailSchema):
         },
     )
     return is_email_successful(res)
+
 
 def is_email_successful(res):
     if res.status_code == 200:

@@ -8,7 +8,7 @@ from bson.objectid import ObjectId
 from jose import jwt
 
 from fundli.database.account import account_database
-from fundli.email_service.email_schema import EmailResponse, EmailSchema
+from fundli.email_service.email_schema import EmailSchema
 from fundli.email_service.email_service import send_email
 from fundli.errors.error import Error
 from fundli.models.account_models import Account
@@ -161,14 +161,14 @@ def send_verification_code(account: Account, code: int):
         )
     )
 
+
 def verify_code(account: Account, code: int):
-    
     if account.password_verification_code == code:
         return True, None
     return False, Error("invalid verification code", 400)
 
 
-def reset_password(password: str,  account: Account):
+def reset_password(password: str, account: Account):
     old_account_obj = account
 
     account.password = hash_password(password)
