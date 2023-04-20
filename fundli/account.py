@@ -201,12 +201,13 @@ async def forgot_password(request: AccountPasswordResetRequest):
                     }
     """
     account = account_service.get_account(request.email)[0]
-    forgot_password_email, error = account_service.forgot_password(
+    forgot_password_email = account_service.forgot_password(
         code=account_service.generate_verification_code(6), account=account
     )
-    if error:
-        raise HTTPException(status_code=error.code, detail=error.msg)
-
+    if not forgot_password_email:
+        raise HTTPException(
+            status_code=forgot_password_email.code, detail=forgot_password_email.msg
+        )
     return forgot_password_email
 
 
@@ -274,8 +275,8 @@ async def reset_password(request: AccountPasswordResetRequest):
     """
     account = account_service.get_account(request.email)[0]
 
-    _, error = account_service.reset_password(request.password, account)
-    if error:
-        raise HTTPException(status_code=error.code, detail=error.msg)
+    reset_password = account_service.reset_password(request.password, account)
+    if not reset_password:
+        raise HTTPException(status_code=reset_password.code, detail=reset_password.msg)
 
     return EmailResponse(message="password reset successful")

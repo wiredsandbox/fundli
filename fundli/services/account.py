@@ -144,8 +144,8 @@ def forgot_password(code: int, account: Account):
         account_database.update(query, account.to_dict())
     except Exception as e:
         print(e)
-        return None, Error("failed to update account", 500)
-    return send_verification_code(account, code), None
+        return Error("failed to update account", 500)
+    return send_verification_code(account, code)
 
 
 def send_verification_code(account: Account, code: int):
@@ -177,18 +177,16 @@ def reset_password(password: str, account: Account):
         account_database.update(old_account_obj.to_dict(), account.to_dict())
     except Exception as e:
         print(e)
-        return None, Error("failed to update account", 500)
-    return (
-        send_email(
-            EmailSchema(
-                recipients=[account.email],
-                subject="Fundli Password Reset",
-                body="Your password has been reset successfully",
-                sender_email="info@fundli.live",
-                sender_name="Favour from Fundli",
-                first_name=account.first_name,
-                email_template="success.html",
-            )
-        ),
-        None,
+        return Error("failed to update account", 500)
+
+    return send_email(
+        EmailSchema(
+            recipients=[account.email],
+            subject="Fundli Password Reset",
+            body="Your password has been reset successfully",
+            sender_email="info@fundli.live",
+            sender_name="Favour from Fundli",
+            first_name=account.first_name,
+            email_template="success.html",
+        )
     )
